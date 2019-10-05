@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="C:\Users\Petra\Desktop\diplomski\dms\font-awesome-4.7.0\css\font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+      <style>
+        body{
+        background-image: url("https://images.pexels.com/photos/1092364/pexels-photo-1092364.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+        }
+       
+        img {
+           width: 100%;
+        }
+        .navbar-brand {
+          padding: 5px 20px;
+          border: 1px solid white ;
+          background:  rgba(27, 61, 252, 0.856);
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          padding: 5px 8px;
+        }
+        .dropdown-content a {
+          color: rgba(39, 38, 38, 0.856);
+          padding: 5px 8px;
+          text-decoration: none;
+          display: block;
+          
+        }
+        .card-body{
+          border: 1px solid black;
+        }   
+        .fa-check-circle{
+          color: rgba(27, 61, 252, 0.856);
+        } 
+        .container h7{
+          color: rgba(27, 61, 252, 0.856);
+          font-weight: 500;
+        }
+        .addToFolder{
+          border: 2px solid rgba(27, 61, 252, 0.856);
+          padding: 2px;
+          width: 130px;
+          background-color: white;
+          text-align: center;
+        }
+        .folders{
+              position:absolute;
+              padding: 2px;
+              width: 190px;
+              height:auto;
+              background:white;
+              top:13%;
+              left:1%;
+              text-align: center;
+              border-radius: 3px;
+            }
+            .folders p{
+              padding-left:3px;
+              text-align: left
+            }
+        
+        .dropdown-content a:hover {background-color: #ddd;}
+        .dropdown:hover .dropdown-content {display: block;}
+
+    </style>
+    <title>Document management system</title>
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <a class="navbar-brand" href="#">Upload</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                    <a class="nav-link" href="/collections">Collections</a>              
+              </li>
+              <li class="nav-item">
+                  <div class="dropdown">
+                      <a class="nav-link" href="#">Create new +</a>
+                       <div class="dropdown-content">
+                         <a href="http://localhost:5000/createFolder">Folder</a>
+                       </div>
+                     </div>
+              </li>    
+            </ul>
+          </div>  
+        </nav>
+
+
+
+    <div class="container">
+      <div class ="folders"> 
+          <h5> Folders</h5>
+          <% folderArray.forEach(folder => { %>
+           <p> <a href = "http://localhost:5000/folders/<%=folder%>"> <i class="fa fa-folder-o" aria-hidden="true"></i> <%=folder %></a></p>
+          <%}) %>
+     </div>
+      <div class="row">
+        <div class="col-md-6 m-auto">
+          <h1 class="text-center display-4 my-4"> File <h7> Upload</h7> </h1> 
+          <form action="/upload" method="POST" enctype="multipart/form-data">
+            <!--enctype when you make a POST request, you have to encode the data that forms the body of the request in some way. -->
+
+            <!--bootstrap-->
+            <div class="custom-file mb-3">
+              <input
+                type="file"
+                name="file"
+                id="file"
+                class="custom-file-input"
+              />
+              <label for="file" class="custom-file-label">Choose File</label>
+            </div>
+            <input
+              type="submit"
+              value="Submit"
+              class="btn btn-primary btn-block"
+            />
+        
+          </form>
+
+         
+          <hr />
+          
+          <% if( typeof lastUploaded ===  'undefined'){ %> 
+            <p>No files to show</p>
+           <% } else { %>
+            <div class="card card-body mb-3">  
+              <h5>Uploaded successfully </h5> 
+              <p> <%= lastUploaded %> <i class="fa fa-check-circle fa-lg"></i> </p> 
+              <hr/>
+              <div class="dropdown">
+                  <p class ="addToFolder"> Add to folder </p>
+                    <div class="dropdown-content">
+                      <% folderArray.forEach(function(item) { %>
+                        <p><a href = "http://localhost:5000/addToFolder/<%=item%>/<%= lastUploaded %>" > <%=item %> </a></p>
+                     <% }) %>
+                      
+                    </div>
+               </div>
+            </div>          
+          <% } %>
+        </div>
+      </div>      
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://use.fontawesome.com/d1425bd879.js"></script>
+    <script type="text/javascript" src="../ocr.js"></script>
+    
+  </body>
+</html>

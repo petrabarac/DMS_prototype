@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="C:\Users\Petra\Desktop\diplomski\dms\font-awesome-4.7.0\css\font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <style>
+           body{
+              background-image: url("https://images.pexels.com/photos/1092364/pexels-photo-1092364.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+           }
+            img {
+               width: 100%;
+            }
+            .navbar-brand {
+              padding: 5px 20px;
+             border: 1px solid white;
+             background:  rgba(27, 61, 252, 0.856);
+
+            }
+            .dropdown {
+              position: relative;
+              display: inline-block;
+            }
+    
+            .dropdown-content {
+              display: none;
+              position: absolute;
+              background-color: #f1f1f1;
+              min-width: 160px;
+              z-index: 1;
+            }
+            .dropdown-content a {
+              color: rgba(39, 38, 38, 0.856);
+              padding: 12px 16px;
+              text-decoration: none;
+              display: block;
+            }
+            .documents{
+              margin-left: 20px;
+            }
+            .card-body{
+             height: auto;
+             width: auto;          
+             float:left;   
+             margin-right: 8px;
+             margin-top: 8px;
+             border: 1px solid black;
+            }
+            .btn{
+              width:110px;
+              border: 1px solid black;
+              background:rgba(72, 131, 241, 0.904); 
+              color: white;
+              margin: 4px 2px;
+              border-radius: 8px
+            }
+            .search-container{
+              margin-top: 3%;    
+              margin-left: 35%;    
+            }
+            .search-container input[type="submit"] {
+              background:rgba(72, 131, 241, 0.904); 
+              color: white;
+              width: 80px;
+              border-radius: 5px;
+              font-weight: bold;
+              letter-spacing: 1px;
+            }
+            .search-container input{
+            margin: 2px;           
+            }
+            .folders{
+              position:absolute;
+              padding: 2px;
+              width: 190px;
+              height:auto;
+              background:white;
+              top:13%;
+              left:1%;
+              text-align: center;
+              border-radius: 3px;
+            }
+            .folders p{
+              padding-left:3px;
+              text-align: left
+            }
+            .fa-pencil{
+                position:absolute;
+                bottom:0;
+                top:4px;
+                right:5px;
+            }
+            .addToFolder{
+          width: 130px;
+          background-color: white;
+          text-align: left;
+        }
+
+  
+            .dropdown-content a:hover {background-color: #ddd;}
+            .dropdown:hover .dropdown-content {display: block;}
+    
+        </style>
+    <title>Document management system</title>
+  </head>
+  <body>
+
+      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <a class="navbar-brand" href="/">Upload</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                    <a class="nav-link" href="/collections">Collections</a>              
+              </li>
+              <li class="nav-item">
+                  <div class="dropdown">
+                      <a class="nav-link" href="#">Create new +</a>
+                       <div class="dropdown-content">
+                         <a href="http://localhost:5000/createFolder">Folder</a>
+                       </div>
+                     </div>
+              </li>    
+            </ul>
+          </div>  
+        </nav>
+
+
+
+    <div class="container">
+        <div class ="folders"> 
+            <h5> Folders</h5>
+            <% folderArray.forEach(folder => { %>
+            <p><a href = "http://localhost:5000/folders/<%=folder%>"> <i class="fa fa-folder-o" aria-hidden="true"></i> <%=folder %></a></p> 
+            <%}) %>
+        </div>
+
+      <div class ="search-container">
+        <h3>   Search document</h3>
+          <form action ="http://localhost:5000/search"  method = "POST" >
+           
+            <input type="text" id ="inputText" name="inputText"  >
+  
+            <input type="submit" id="search" value="search" >
+          </form>
+
+      </div>
+      <hr/>
+      <% if(search){ %>
+        <div>
+          <a href="http://localhost:5000/collections/ocrdocuments" style="color: #000000;">  <i class="fa fa-times fa-lg" aria-hidden="true"></i>  remove search filter </a>
+        </div>        
+      <% } %>
+      <div class="documents">
+          <% if(files){ %> <% files.forEach(function(file) { %>
+            <div class="card card-body mb-3">   
+                <a href="http://localhost:5000/updateFile/<%=file.filename%>"> <i class="fa fa-pencil fa-lg" aria-hidden="true" style="color: #000000;"></i>    </a>          
+                  <h6> <i class="fa fa-file-o"></i> <%= file.metadata %>   </h6> 
+                  <% if(typeof file.uploadDate ===  'undefined'){ %>
+                    <p> <i class="fa fa-upload"></i>  <%= file.date.toDateString() %></p> 
+                  <% } else { %>  
+                    <p> <i class="fa fa-upload"></i>  <%= file.uploadDate.toDateString() %></p> 
+                    <% } %>
+
+                    <!-- prikazuje folder u kojem je dokumenti ili omogucava nadodavanje-->
+                    <% if(file.aliases === "folderName") { %>
+                      <div class="dropdown">
+                          <p class ="addToFolder"> <i class="fa fa-plus" aria-hidden="true"></i> Add to folder </p>
+                            <div class="dropdown-content">
+                              <% folderArray.forEach(function(item) { %>
+                                <p><a href = "http://localhost:5000/addToFolder/<%=item%>/<%=file.metadata %>" > <%=item %> </a></p>
+                             <% }) %>
+                              
+                            </div>
+                       </div>
+                    <%} else { %>
+                    <p> <i class="fa fa-folder" aria-hidden="true"></i> <%=file.aliases %></p>
+                    <% } %>
+
+
+
+                  <a href="http://localhost:5000/files/<%=  file.filename %>" target="_blank"> View document</a>             
+                   <a href = "http://localhost:5000/OCR/<%=  file.filename %>" target="_blank"> OCR Document</a>              
+              <!-- using metod POST request cause we r using method override, pomoću query string, ovo ?_metod=DELETE; jer želimo da bude delete request -->
+                  <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+                     <button class="btn  btn-block mt-4">Delete</button>
+                  </form>
+            </div>
+            <% }) %> <% } else { %>
+            <p>No files to show</p>
+            <% } %>
+
+      </div>
+        
+      
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://use.fontawesome.com/d1425bd879.js"></script>
+    <script type="text/javascript" src="../ocr.js"></script>
+    
+  </body>
+</html>
